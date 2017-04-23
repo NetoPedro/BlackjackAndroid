@@ -27,15 +27,17 @@ public class Deck {
         }
     }
 
-    private boolean removeFromDeck(Card card){
+    public boolean removeFromDeck(Card card){
         return cards.remove(card);
     }
 
-    private boolean addToDeck(Card card){
+    public boolean addToDeck(Card card){
         if(!cards.contains(card)){
             cards.add(card);
         }
         return false;
     }
+
+
 
 }
