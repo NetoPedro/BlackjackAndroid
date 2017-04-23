@@ -61,7 +61,19 @@ public class Card {
         return mValue;
     }
 
+
+
     public CardSuit cardSuit(){
         return mSuit;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null ) return false;
+        if(this == obj) return true;
+        if(!(obj instanceof Card))  return false;
+        Card that = (Card) obj;
+        return that.mSuit.equals(mSuit) && that.mType.equals(mType);
+    }
+
 }
