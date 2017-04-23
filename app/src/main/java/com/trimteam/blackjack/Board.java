@@ -40,8 +40,57 @@ public class Board {
         }
     }
 
+    public boolean userMove(){
+        int initialSize = userHand.size();
+        while(initialSize == userHand.size()) {
+            int typeSelection = (int) Math.random() * 13,
+                    suitSelection = (int) Math.random() * 4;
+            Card card = new Card(Card.CardSuit.values()[suitSelection], Card.CardType.values()[typeSelection]);
+            if (mDeck.removeFromDeck(card)) userHand.add(card);
+        }
+        return calculateUserPoints()>21;
+    }
+
+
+    public boolean IAMove(){
+        int initialSize = IAHand.size();
+        while(initialSize == IAHand.size()) {
+            int typeSelection = (int) Math.random() * 13,
+                    suitSelection = (int) Math.random() * 4;
+            Card card = new Card(Card.CardSuit.values()[suitSelection], Card.CardType.values()[typeSelection]);
+            if (mDeck.removeFromDeck(card)) IAHand.add(card);
+        }
+        return calculateIAPoints()>21;
+    }
+
+
     public int checkGameOver(){
-       boolean hasAS = false;
+       int points = calculateUserPoints();
+        if(points > 21) return 1;
+
+        points = calculateIAPoints();
+        if(points > 21) return -1;
+        return 0 ;
+    }
+
+    private int calculateIAPoints() {
+        boolean hasAS = false;
+        int points = 0;
+        for(Card card: IAHand){
+            if(card.cardType() == Card.CardType.AS){
+                hasAS = true;
+            }
+            points += card.value();
+        }
+        if(hasAS && points>21){
+            points -=10;
+        }
+        return points;
+    }
+
+
+    public int calculateUserPoints(){
+        boolean hasAS = false;
         int points = 0;
         for(Card card: userHand){
             if(card.cardType() == Card.CardType.AS){
@@ -52,22 +101,8 @@ public class Board {
         if(hasAS && points>21){
             points -=10;
         }
-        if(points > 21) return 1;
-        hasAS = false;
-        points = 0;
-        for(Card card: IAHand){
-            if(card.cardType() == Card.CardType.AS){
-                hasAS = true;
-            }
-            points += card.value();
-        }
-        if(hasAS && points>21){
-            points -=10;
-        }
-        if(points > 21) return -1;
-        return 0 ;
+        return points;
     }
-
 
 
 
