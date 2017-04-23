@@ -35,19 +35,26 @@ public class Board {
     }
 
     public boolean userMove(){
-        int initialSize = userHand.size();
-        while(initialSize == userHand.size()) {
-            perfomMove(userHand);
+        if(GameStates.PLAYER_TURN.equals(gameState)) {
+            int initialSize = userHand.size();
+            while (initialSize == userHand.size()) {
+                perfomMove(userHand);
+            }
+            gameState = GameStates.IA_TURN; 
         }
         return calculateUserPoints()>21;
     }
 
 
     public boolean IAMove(){
-        int initialSize = IAHand.size();
-        while(initialSize == IAHand.size()) {
-            perfomMove(IAHand);
-        }
+
+       if(gameState.equals(GameStates.IA_TURN)) {
+           int initialSize = IAHand.size();
+           while (initialSize == IAHand.size()) {
+               perfomMove(IAHand);
+           }
+           gameState = GameStates.PLAYER_TURN;
+       }
         return calculateIAPoints()>21;
     }
 
