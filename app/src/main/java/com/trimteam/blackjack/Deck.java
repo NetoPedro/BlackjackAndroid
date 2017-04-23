@@ -7,13 +7,21 @@ import java.util.ArrayList;
  */
 public class Deck {
 
-
-   // private Card[] cards= new Card[52];
+    /**
+     * All cards of the deck. Played cards are removed
+     */
     private ArrayList cards = new ArrayList();
+
+    /**
+     * Empty Constructor.
+     */
     public Deck(){
         fillDeck();
     }
 
+    /**
+     * Method to fill the deck with all the 52 cards. 4(suits) * 13(types).
+     */
     private void fillDeck() {
         int typeSelection = 0, suitSelection = 0;
         for(int i = 0; i < 52 ;i++){
@@ -27,10 +35,20 @@ public class Deck {
         }
     }
 
+    /**
+     * Remove a played card from the deck.
+     * @param card Card to be removed
+     * @return
+     */
     public boolean removeFromDeck(Card card){
         return cards.remove(card);
     }
 
+    /**
+     * Add a new card to the deck.
+     * @param card Card to be added.
+     * @return
+     */
     public boolean addToDeck(Card card){
         if(!cards.contains(card)){
             cards.add(card);

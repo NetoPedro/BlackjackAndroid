@@ -6,25 +6,47 @@ import java.util.Random;
  * Created by pedroneto on 22/04/17.
  */
 public class Card {
-
+    /**
+     * Types of cards. This type determines the value of the card
+     */
     public enum CardType {
         AS,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,KING,QUEEN,VALET
     }
 
+    /**
+     * Suits of cards. There are 13 types for each suit. One type for suit!
+     */
     public enum CardSuit{
         HEARTS,DIAMONDS,CLUBS, SPADES
     }
 
+    /**
+     * Value of the card. Predetermined by card's type.
+     */
     private int  mValue ;
+    /**
+     * Suit of the card
+     */
     private CardSuit mSuit;
+    /**
+     * Type of the card
+     */
     private CardType mType;
 
+    /**
+     * Constructor. Suit and Type needed.
+     * @param suit
+     * @param type
+     */
     public Card(CardSuit suit, CardType type){
         mType = type;
         mSuit = suit;
         defineCardValue();
     }
 
+    /**
+     * Determines the card value, using is type as reference.
+     */
     private void defineCardValue(){
         switch (mType){
             case AS : mValue = 11;
@@ -53,16 +75,27 @@ public class Card {
         }
     }
 
+    /**
+     * Returns the card type
+     * @return
+     */
     public CardType cardType(){
         return mType;
     }
 
+    /**
+     * Returns the card value
+     * @return
+     */
     public int value(){
         return mValue;
     }
 
 
-
+    /**
+     * Returns card Suit.
+     * @return
+     */
     public CardSuit cardSuit(){
         return mSuit;
     }
