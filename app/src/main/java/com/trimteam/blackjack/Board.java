@@ -26,16 +26,10 @@ public class Board {
 
         while(userHand.size() != 2 || IAHand.size() != 2){
             if(userHand.size() != 2) {
-                int typeSelection = (int) Math.random() * 13,
-                        suitSelection = (int) Math.random() * 4;
-                Card card = new Card(Card.CardSuit.values()[suitSelection], Card.CardType.values()[typeSelection]);
-                if (mDeck.removeFromDeck(card)) userHand.add(card);
+                perfomMove(userHand);
             }
             if(IAHand.size()!=2){
-                int typeSelection = (int) Math.random() * 13,
-                        suitSelection = (int) Math.random() * 4;
-                Card card = new Card(Card.CardSuit.values()[suitSelection], Card.CardType.values()[typeSelection]);
-                if (mDeck.removeFromDeck(card)) IAHand.add(card);
+                perfomMove(IAHand);
             }
         }
     }
@@ -43,10 +37,7 @@ public class Board {
     public boolean userMove(){
         int initialSize = userHand.size();
         while(initialSize == userHand.size()) {
-            int typeSelection = (int) Math.random() * 13,
-                    suitSelection = (int) Math.random() * 4;
-            Card card = new Card(Card.CardSuit.values()[suitSelection], Card.CardType.values()[typeSelection]);
-            if (mDeck.removeFromDeck(card)) userHand.add(card);
+            perfomMove(userHand);
         }
         return calculateUserPoints()>21;
     }
@@ -55,14 +46,19 @@ public class Board {
     public boolean IAMove(){
         int initialSize = IAHand.size();
         while(initialSize == IAHand.size()) {
-            int typeSelection = (int) Math.random() * 13,
-                    suitSelection = (int) Math.random() * 4;
-            Card card = new Card(Card.CardSuit.values()[suitSelection], Card.CardType.values()[typeSelection]);
-            if (mDeck.removeFromDeck(card)) IAHand.add(card);
+            perfomMove(IAHand);
         }
         return calculateIAPoints()>21;
     }
 
+
+    private void perfomMove(ArrayList<Card> moveList){
+        int typeSelection = (int) Math.random() * 13,
+                suitSelection = (int) Math.random() * 4;
+        Card card = new Card(Card.CardSuit.values()[suitSelection], Card.CardType.values()[typeSelection]);
+        if (mDeck.removeFromDeck(card)) moveList.add(card);
+
+    }
 
     public int checkGameOver(){
        int points = calculateUserPoints();
@@ -74,25 +70,19 @@ public class Board {
     }
 
     private int calculateIAPoints() {
-        boolean hasAS = false;
-        int points = 0;
-        for(Card card: IAHand){
-            if(card.cardType() == Card.CardType.AS){
-                hasAS = true;
-            }
-            points += card.value();
-        }
-        if(hasAS && points>21){
-            points -=10;
-        }
-        return points;
+        return calculatePoints(IAHand);
     }
 
 
     public int calculateUserPoints(){
+       return calculatePoints(userHand);
+    }
+
+
+    private int calculatePoints(ArrayList<Card> pointsList){
         boolean hasAS = false;
         int points = 0;
-        for(Card card: userHand){
+        for(Card card: pointsList){
             if(card.cardType() == Card.CardType.AS){
                 hasAS = true;
             }
@@ -103,7 +93,5 @@ public class Board {
         }
         return points;
     }
-
-
 
 }
