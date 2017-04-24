@@ -35,7 +35,7 @@ public class Board {
     /**
      * Empty constructor.
      */
-    public Board(){
+    protected Board(){
         mDeck = new Deck();
         gameState = GameStates.PLAYER_TURN;
         userHand = new ArrayList<>();
@@ -148,6 +148,22 @@ public class Board {
             points -=10;
         }
         return points;
+    }
+
+    /**
+     * Returns a new Board Object!
+     * @return
+     */
+    public static Board startBoard(){
+        return new Board();
+    }
+
+    /**
+     * Returns a new Board Object. 
+     * @return
+     */
+    public static Board restartBoard(){
+        return startBoard();
     }
 
 }
