@@ -159,11 +159,19 @@ public class Board {
     }
 
     /**
-     * Returns a new Board Object. 
+     * Returns the user set of cards
      * @return
      */
-    public static Board restartBoard(){
-        return startBoard();
+    public ArrayList<Card> userHand(){
+        return  userHand;
+    }
+
+    /**
+     * Returns the IA set of cards
+     * @return
+     */
+    public ArrayList<Card> IAHand(){
+        return IAHand;
     }
 
 }
