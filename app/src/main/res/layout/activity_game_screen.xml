@@ -44,14 +44,14 @@
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="New Button"
+            android:text="HIT"
             android:id="@+id/hitButton"
             android:layout_weight="1" />
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="New Button"
+            android:text="STAND"
             android:id="@+id/standButton"
             android:layout_weight="1"/>
     </LinearLayout>

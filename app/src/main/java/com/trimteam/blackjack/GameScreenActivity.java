@@ -36,6 +36,11 @@ public class GameScreenActivity extends AppCompatActivity {
         standButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                while (mBoard.calculateIAPoints()<17){
+                    mBoard.IAMove();
+                    updateGrids();
+                }
+
                 if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints()){
                     alertGameOver("Fez " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
                 }
@@ -58,7 +63,6 @@ public class GameScreenActivity extends AppCompatActivity {
                     mBoard.IAMove();
                 }
                 updateGrids();
-                pointsText.setText("User : "+mBoard.calculateUserPoints()+"\nIA: "+mBoard.calculateIAPoints());
                 int result = mBoard.checkGameOver();
                 if(result==1){
                     alertGameOver("Fez " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
@@ -102,13 +106,19 @@ public class GameScreenActivity extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
         updateGrids();
-        pointsText.setText("User : "+mBoard.calculateUserPoints()+"\nIA: "+mBoard.calculateIAPoints());
 
     }
 
     private void updateGrids(){
         ArrayList<Card> userHand = mBoard.userHand();
         ArrayList<Card> IAHand = mBoard.IAHand();
+        int maxSize ;
+        if(userHand.size()>IAHand.size()){
+            maxSize = userHand.size();
+        }
+        else {
+            maxSize = IAHand.size();
+        }
         userHandGrid.removeAllViews();
         userHandGrid.setColumnCount(userHand.size());
         IAHandGrid.removeAllViews();
@@ -124,7 +134,7 @@ public class GameScreenActivity extends AppCompatActivity {
             cardImageView.setImageResource(id);
 
             userHandGrid.addView(cardImageView, i);
-            cardImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            cardImageView.setScaleType(ImageView.ScaleType.CENTER);
             cardImageView.setAdjustViewBounds(true);
 
             //cardImageView.setCompoundDrawablesWithIntrinsicBounds(rightIc, 0, 0, 0);
@@ -132,14 +142,16 @@ public class GameScreenActivity extends AppCompatActivity {
             param.height = GridLayout.LayoutParams.MATCH_PARENT;
             int width = parentLayout.getWidth();
             if(width == 0) width = this.getWindow().getWindowManager().getDefaultDisplay().getWidth();
-             param.width = width/11;
+             param.width = width/maxSize -20;
             param.rightMargin = 10;
+            param.leftMargin = 10;
             param.topMargin = 0;
 
             param.setGravity(Gravity.RIGHT);
             param.columnSpec = GridLayout.spec(i);
             param.rowSpec = GridLayout.spec(0);
             cardImageView.setLayoutParams (param);
+            pointsText.setText("User : "+mBoard.calculateUserPoints()+"\nIA: "+mBoard.calculateIAPoints());
 
         }
 
@@ -149,16 +161,16 @@ public class GameScreenActivity extends AppCompatActivity {
             int id = getResources().getIdentifier(IAHand.get(i).resource(), "drawable", getPackageName());
             cardImageView.setImageResource(id);
             IAHandGrid.addView(cardImageView, i);
-            cardImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             cardImageView.setAdjustViewBounds(true);
             //cardImageView.setCompoundDrawablesWithIntrinsicBounds(rightIc, 0, 0, 0);
             GridLayout.LayoutParams param =new GridLayout.LayoutParams();
             param.height = GridLayout.LayoutParams.WRAP_CONTENT;
             int width = parentLayout.getWidth();
             if(width == 0) width = this.getWindow().getWindowManager().getDefaultDisplay().getWidth();
-            param.width = width/11;
-            param.rightMargin = 5;
-            param.topMargin = 5;
+            param.width = width/maxSize- 20;
+            param.rightMargin = 10;
+            param.leftMargin = 10;
+            param.topMargin = 30;
             param.setGravity(Gravity.CENTER);
             param.columnSpec = GridLayout.spec(i);
             param.rowSpec = GridLayout.spec(0);
