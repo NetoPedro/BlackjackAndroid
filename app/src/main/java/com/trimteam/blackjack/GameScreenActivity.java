@@ -12,6 +12,7 @@ import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -20,15 +21,33 @@ public class GameScreenActivity extends AppCompatActivity {
     private Board mBoard;
     GridLayout IAHandGrid, userHandGrid;
     LinearLayout parentLayout;
-    Button hitButton;
+    Button hitButton, standButton;
+    TextView pointsText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
         startComponents();
         showCards();
+        pointsText = (TextView) findViewById(R.id.pointsInfoTextView);
         IAHandGrid = (GridLayout) findViewById(R.id.IAHand);
         userHandGrid = (GridLayout) findViewById(R.id.userHand);
+        standButton = (Button) findViewById(R.id.standButton);
+        standButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints()){
+                    alertGameOver("Fez " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
+                }
+                else if(mBoard.calculateIAPoints()<mBoard.calculateUserPoints()){
+                    alertGameOver("Venceu com  " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
+
+                }
+                else{
+                    alertGameOver("Empate com " + mBoard.calculateUserPoints()+ " pontos. Deseja continuar? ");
+                }
+            }
+        });
         hitButton = (Button) findViewById(R.id.hitButton);
         parentLayout = (LinearLayout) findViewById(R.id.linear_layout_game_board);
         hitButton.setOnClickListener(new View.OnClickListener() {
@@ -39,9 +58,9 @@ public class GameScreenActivity extends AppCompatActivity {
                     mBoard.IAMove();
                 }
                 updateGrids();
+                pointsText.setText("User : "+mBoard.calculateUserPoints()+"\nIA: "+mBoard.calculateIAPoints());
                 int result = mBoard.checkGameOver();
                 if(result==1){
-                    hitButton.setEnabled(false);
                     alertGameOver("Fez " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
                 }
                 else if(result == -1){
@@ -67,7 +86,12 @@ public class GameScreenActivity extends AppCompatActivity {
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
+
+                        //TODO change to previous screen
+                        startComponents();
+                        showCards();
+                        updateGrids();
+                        hitButton.setEnabled(true);
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -78,6 +102,8 @@ public class GameScreenActivity extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
         updateGrids();
+        pointsText.setText("User : "+mBoard.calculateUserPoints()+"\nIA: "+mBoard.calculateIAPoints());
+
     }
 
     private void updateGrids(){
