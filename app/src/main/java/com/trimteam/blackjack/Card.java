@@ -99,10 +99,10 @@ public class Card {
             resource +=mType.name().toLowerCase();
         }
         else{
-            resource+=mValue;
+            resource+="c"+mValue;
         }
         resource+="_of_" + mSuit.name().toLowerCase();
-        resource+=".png";
+        //resource+=".png";
         return resource;
     }
 

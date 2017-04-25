@@ -1,12 +1,17 @@
 package com.trimteam.blackjack;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -14,6 +19,8 @@ public class GameScreenActivity extends AppCompatActivity {
 
     private Board mBoard;
     GridLayout IAHandGrid, userHandGrid;
+    LinearLayout parentLayout;
+    Button hitButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,14 +29,63 @@ public class GameScreenActivity extends AppCompatActivity {
         showCards();
         IAHandGrid = (GridLayout) findViewById(R.id.IAHand);
         userHandGrid = (GridLayout) findViewById(R.id.userHand);
+        hitButton = (Button) findViewById(R.id.hitButton);
+        parentLayout = (LinearLayout) findViewById(R.id.linear_layout_game_board);
+        hitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBoard.userMove();
+                if(mBoard.calculateIAPoints()<17){
+                    mBoard.IAMove();
+                }
+                updateGrids();
+                int result = mBoard.checkGameOver();
+                if(result==1){
+                    hitButton.setEnabled(false);
+                    alertGameOver("Fez " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
+                }
+                else if(result == -1){
+                    alertGameOver("Venceu com  " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
+                }
+            }
+        });
+        System.out.println();
+    }
+
+
+    private void alertGameOver(String text){
+        new AlertDialog.Builder(this)
+                .setTitle("Game Over")
+                .setMessage(text)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        startComponents();
+                        showCards();
+                        updateGrids();
+                        hitButton.setEnabled(true);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         updateGrids();
     }
 
     private void updateGrids(){
         ArrayList<Card> userHand = mBoard.userHand();
         ArrayList<Card> IAHand = mBoard.IAHand();
-
+        userHandGrid.removeAllViews();
         userHandGrid.setColumnCount(userHand.size());
+        IAHandGrid.removeAllViews();
         IAHandGrid.setColumnCount(IAHand.size());
 
 
@@ -37,18 +93,26 @@ public class GameScreenActivity extends AppCompatActivity {
         for (int i = 0; i < userHand.size(); i++) {
             cardImageView = new ImageView(this.getApplicationContext());
             //cardImageView.setText(facilities.get(i));
-            int id = getResources().getIdentifier(userHand.get(i).resource(), "drawable", getPackageName());
+            String resource = userHand.get(i).resource();
+            int id = getResources().getIdentifier(resource, "drawable", getPackageName());
             cardImageView.setImageResource(id);
+
             userHandGrid.addView(cardImageView, i);
+            cardImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            cardImageView.setAdjustViewBounds(true);
+
             //cardImageView.setCompoundDrawablesWithIntrinsicBounds(rightIc, 0, 0, 0);
             GridLayout.LayoutParams param =new GridLayout.LayoutParams();
-            param.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            param.width = GridLayout.LayoutParams.WRAP_CONTENT;
-            param.rightMargin = 5;
-            param.topMargin = 5;
-            param.setGravity(Gravity.CENTER);
+            param.height = GridLayout.LayoutParams.MATCH_PARENT;
+            int width = parentLayout.getWidth();
+            if(width == 0) width = this.getWindow().getWindowManager().getDefaultDisplay().getWidth();
+             param.width = width/11;
+            param.rightMargin = 10;
+            param.topMargin = 0;
+
+            param.setGravity(Gravity.RIGHT);
             param.columnSpec = GridLayout.spec(i);
-            param.rowSpec = GridLayout.spec(1);
+            param.rowSpec = GridLayout.spec(0);
             cardImageView.setLayoutParams (param);
 
         }
@@ -59,10 +123,14 @@ public class GameScreenActivity extends AppCompatActivity {
             int id = getResources().getIdentifier(IAHand.get(i).resource(), "drawable", getPackageName());
             cardImageView.setImageResource(id);
             IAHandGrid.addView(cardImageView, i);
+            cardImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            cardImageView.setAdjustViewBounds(true);
             //cardImageView.setCompoundDrawablesWithIntrinsicBounds(rightIc, 0, 0, 0);
             GridLayout.LayoutParams param =new GridLayout.LayoutParams();
             param.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            param.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            int width = parentLayout.getWidth();
+            if(width == 0) width = this.getWindow().getWindowManager().getDefaultDisplay().getWidth();
+            param.width = width/11;
             param.rightMargin = 5;
             param.topMargin = 5;
             param.setGravity(Gravity.CENTER);

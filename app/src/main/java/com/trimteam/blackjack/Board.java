@@ -63,12 +63,10 @@ public class Board {
      * @return returns true if the user lose
      */
     public boolean userMove(){
-        if(GameStates.PLAYER_TURN.equals(gameState)) {
             int initialSize = userHand.size();
             while (initialSize == userHand.size()) {
                 perfomMove(userHand);
-            }
-            gameState = GameStates.IA_TURN;
+
         }
         return calculateUserPoints()>21;
     }
@@ -79,12 +77,12 @@ public class Board {
      */
     public boolean IAMove(){
 
-       if(gameState.equals(GameStates.IA_TURN)) {
            int initialSize = IAHand.size();
            while (initialSize == IAHand.size()) {
                perfomMove(IAHand);
-           }
-           gameState = GameStates.PLAYER_TURN;
+
+
+
        }
         return calculateIAPoints()>21;
     }
@@ -94,8 +92,8 @@ public class Board {
      * @param moveList
      */
     private void perfomMove(ArrayList<Card> moveList){
-        int typeSelection = (int) Math.random() * 13,
-                suitSelection = (int) Math.random() * 4;
+        int typeSelection =  (int)(Math.random() * 12),
+                suitSelection = (int)( Math.random() * 3);
         Card card = new Card(Card.CardSuit.values()[suitSelection], Card.CardType.values()[typeSelection]);
         if (mDeck.removeFromDeck(card)) moveList.add(card);
 
@@ -118,7 +116,7 @@ public class Board {
      * Calculates IA points
      * @return
      */
-    private int calculateIAPoints() {
+    public int calculateIAPoints() {
         return calculatePoints(IAHand);
     }
 

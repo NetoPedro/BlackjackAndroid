@@ -25,11 +25,10 @@ public class Deck {
     private void fillDeck() {
         int typeSelection = 0, suitSelection = 0;
         for(int i = 0; i < 52 ;i++){
-            if(i%13 == 0 ) {
+            if(i%13 == 0 && i!= 0 ) {
                 typeSelection = 0;
                 suitSelection++;
             }
-
             cards.add(new Card(Card.CardSuit.values()[suitSelection], Card.CardType.values()[typeSelection]));
             typeSelection++;
         }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:id="@+id/linear_layout_game_board"
     android:orientation="vertical"
     tools:context="com.trimteam.blackjack.GameScreenActivity">
 
@@ -13,6 +13,7 @@
         android:rowCount="1"
         android:columnCount="7"
         android:layout_weight="4"
+        android:layout_gravity="center"
         android:id="@+id/IAHand"></GridLayout>
 
     <GridLayout
@@ -21,6 +22,8 @@
         android:columnCount="1"
         android:rowCount="9"
         android:layout_weight="4"
+        android:layout_gravity="center"
+
         android:id="@+id/userHand"></GridLayout>
 
     <TextView
