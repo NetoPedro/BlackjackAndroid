@@ -2,14 +2,12 @@ package com.trimteam.blackjack;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +20,7 @@ public class GameScreenActivity extends AppCompatActivity {
     GridLayout IAHandGrid, userHandGrid;
     LinearLayout parentLayout;
     Button hitButton, standButton;
-    TextView pointsText;
+    TextView userPointsText, iaPointsText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +28,8 @@ public class GameScreenActivity extends AppCompatActivity {
         alertGameStarted();
 
 
-        pointsText = (TextView) findViewById(R.id.pointsInfoTextView);
+        userPointsText = (TextView) findViewById(R.id.userPointsInfoTextView);
+        iaPointsText = (TextView) findViewById(R.id.iaPointsInfoTextView);
         IAHandGrid = (GridLayout) findViewById(R.id.IAHand);
         userHandGrid = (GridLayout) findViewById(R.id.userHand);
         standButton = (Button) findViewById(R.id.standButton);
@@ -78,7 +77,7 @@ public class GameScreenActivity extends AppCompatActivity {
 
 
     private void alertGameOver(String text){
-        new AlertDialog.Builder(this)
+       AlertDialog alert =  new AlertDialog.Builder(this)
                 .setTitle("Game Over")
                 .setMessage(text)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -101,10 +100,12 @@ public class GameScreenActivity extends AppCompatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+        alert.setCancelable(false) ;
+        alert.setCanceledOnTouchOutside(false);
     }
 
     private void alertGameStarted(){
-        new AlertDialog.Builder(this)
+        AlertDialog alert = new AlertDialog.Builder(this)
                 .setTitle("Game Start")
                 .setMessage("Start Game")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -127,6 +128,8 @@ public class GameScreenActivity extends AppCompatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+        alert.setCancelable(false) ;
+        alert.setCanceledOnTouchOutside(false);
     }
 
 
@@ -167,13 +170,15 @@ public class GameScreenActivity extends AppCompatActivity {
              param.width = width/maxSize -20;
             param.rightMargin = 10;
             param.leftMargin = 10;
+            param.bottomMargin=20;
             param.topMargin = 0;
 
             param.setGravity(Gravity.RIGHT);
             param.columnSpec = GridLayout.spec(i);
             param.rowSpec = GridLayout.spec(0);
             cardImageView.setLayoutParams (param);
-            pointsText.setText("User : "+mBoard.calculateUserPoints()+"\nIA: "+mBoard.calculateIAPoints());
+            userPointsText.setText("User Points: "+mBoard.calculateUserPoints());
+            iaPointsText.setText("IA Points:"+mBoard.calculateIAPoints()+" \nUser Hand");
 
         }
 
@@ -193,6 +198,8 @@ public class GameScreenActivity extends AppCompatActivity {
             param.rightMargin = 10;
             param.leftMargin = 10;
             param.topMargin = 30;
+            param.bottomMargin=20;
+
             param.setGravity(Gravity.CENTER);
             param.columnSpec = GridLayout.spec(i);
             param.rowSpec = GridLayout.spec(0);
