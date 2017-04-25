@@ -37,6 +37,8 @@ public class GameScreenActivity extends AppCompatActivity {
         for (int i = 0; i < userHand.size(); i++) {
             cardImageView = new ImageView(this.getApplicationContext());
             //cardImageView.setText(facilities.get(i));
+            int id = getResources().getIdentifier(userHand.get(i).resource(), "drawable", getPackageName());
+            cardImageView.setImageResource(id);
             userHandGrid.addView(cardImageView, i);
             //cardImageView.setCompoundDrawablesWithIntrinsicBounds(rightIc, 0, 0, 0);
             GridLayout.LayoutParams param =new GridLayout.LayoutParams();
@@ -54,6 +56,8 @@ public class GameScreenActivity extends AppCompatActivity {
         for (int i = 0; i < IAHand.size(); i++) {
             cardImageView = new ImageView(this.getApplicationContext());
             //cardImageView.setText(facilities.get(i));
+            int id = getResources().getIdentifier(IAHand.get(i).resource(), "drawable", getPackageName());
+            cardImageView.setImageResource(id);
             IAHandGrid.addView(cardImageView, i);
             //cardImageView.setCompoundDrawablesWithIntrinsicBounds(rightIc, 0, 0, 0);
             GridLayout.LayoutParams param =new GridLayout.LayoutParams();
@@ -63,7 +67,7 @@ public class GameScreenActivity extends AppCompatActivity {
             param.topMargin = 5;
             param.setGravity(Gravity.CENTER);
             param.columnSpec = GridLayout.spec(i);
-            param.rowSpec = GridLayout.spec(1);
+            param.rowSpec = GridLayout.spec(0);
             cardImageView.setLayoutParams (param);
 
         }

@@ -10,7 +10,7 @@ public class Card {
      * Types of cards. This type determines the value of the card
      */
     public enum CardType {
-        AS,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,KING,QUEEN,VALET
+        ACE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,KING,QUEEN,JACK
     }
 
     /**
@@ -19,6 +19,7 @@ public class Card {
     public enum CardSuit{
         HEARTS,DIAMONDS,CLUBS, SPADES
     }
+
 
     /**
      * Value of the card. Predetermined by card's type.
@@ -49,7 +50,7 @@ public class Card {
      */
     private void defineCardValue(){
         switch (mType){
-            case AS : mValue = 11;
+            case ACE : mValue = 11;
                 break;
             case TWO: mValue = 2;
                 break;
@@ -70,7 +71,7 @@ public class Card {
             case TEN: ;
             case KING:;
             case QUEEN:;
-            case VALET: mValue = 10;
+            case JACK: mValue = 10;
                 break;
         }
     }
@@ -91,6 +92,19 @@ public class Card {
         return mValue;
     }
 
+
+    public String resource(){
+        String resource = "";
+        if(mType.equals(CardType.ACE)||mType.equals(CardType.KING)||mType.equals(CardType.QUEEN)||mType.equals(CardType.JACK)){
+            resource +=mType.name().toLowerCase();
+        }
+        else{
+            resource+=mValue;
+        }
+        resource+="_of_" + mSuit.name().toLowerCase();
+        resource+=".png";
+        return resource;
+    }
 
     /**
      * Returns card Suit.

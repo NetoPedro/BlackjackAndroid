@@ -139,7 +139,7 @@ public class Board {
         boolean hasAS = false;
         int points = 0;
         for(Card card: pointsList){
-            if(card.cardType() == Card.CardType.AS){
+            if(card.cardType() == Card.CardType.ACE){
                 hasAS = true;
             }
             points += card.value();
