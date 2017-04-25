@@ -41,10 +41,10 @@ public class GameScreenActivity extends AppCompatActivity {
                     updateGrids();
                 }
 
-                if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints()){
+                if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints() && mBoard.calculateIAPoints()<=21){
                     alertGameOver("Fez " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
                 }
-                else if(mBoard.calculateIAPoints()<mBoard.calculateUserPoints()){
+                else if(mBoard.calculateIAPoints()<mBoard.calculateUserPoints() || mBoard.calculateIAPoints()>21){
                     alertGameOver("Venceu com  " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
 
                 }
