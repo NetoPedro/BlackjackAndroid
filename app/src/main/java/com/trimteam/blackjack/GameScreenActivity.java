@@ -27,8 +27,9 @@ public class GameScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-        startComponents();
-        showCards();
+        alertGameStarted();
+
+
         pointsText = (TextView) findViewById(R.id.pointsInfoTextView);
         IAHandGrid = (GridLayout) findViewById(R.id.IAHand);
         userHandGrid = (GridLayout) findViewById(R.id.userHand);
@@ -102,12 +103,33 @@ public class GameScreenActivity extends AppCompatActivity {
                 .show();
     }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        updateGrids();
+    private void alertGameStarted(){
+        new AlertDialog.Builder(this)
+                .setTitle("Game Start")
+                .setMessage("Start Game")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        startComponents();
+                        showCards();
+                        updateGrids();
+                        hitButton.setEnabled(true);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
 
+                        //TODO change to previous screen
+                        startComponents();
+                        showCards();
+                        updateGrids();
+                        hitButton.setEnabled(true);
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
+
+
 
     private void updateGrids(){
         ArrayList<Card> userHand = mBoard.userHand();
