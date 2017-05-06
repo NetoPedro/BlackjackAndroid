@@ -46,7 +46,7 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(SplashScreen.this, GameScreenActivity.class);
+                Intent i = new Intent(SplashScreen.this, MenuActivity.class);
                 startActivity(i);
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 finish();

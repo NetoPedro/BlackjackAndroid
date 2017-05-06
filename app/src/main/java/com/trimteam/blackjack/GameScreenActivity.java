@@ -25,7 +25,6 @@ public class GameScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-        alertGameStarted();
 
 
         userPointsText = (TextView) findViewById(R.id.userPointsInfoTextView);
@@ -72,12 +71,23 @@ public class GameScreenActivity extends AppCompatActivity {
                 }
             }
         });
+
+        startComponents();
+        showCards();
+        updateGrids();
+        hitButton.setEnabled(true);
         System.out.println();
     }
 
 
     private void alertGameOver(String text){
-       AlertDialog alert =  new AlertDialog.Builder(this)
+        hitButton.setEnabled(false);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        AlertDialog alert =  new AlertDialog.Builder(this)
                 .setTitle("Game Over")
                 .setMessage(text)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -104,33 +114,6 @@ public class GameScreenActivity extends AppCompatActivity {
         alert.setCanceledOnTouchOutside(false);
     }
 
-    private void alertGameStarted(){
-        AlertDialog alert = new AlertDialog.Builder(this)
-                .setTitle("Game Start")
-                .setMessage("Start Game")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        startComponents();
-                        showCards();
-                        updateGrids();
-                        hitButton.setEnabled(true);
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        //TODO change to previous screen
-                        startComponents();
-                        showCards();
-                        updateGrids();
-                        hitButton.setEnabled(true);
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-        alert.setCancelable(false) ;
-        alert.setCanceledOnTouchOutside(false);
-    }
 
 
 
@@ -206,6 +189,8 @@ public class GameScreenActivity extends AppCompatActivity {
             cardImageView.setLayoutParams (param);
 
         }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
     }
 
     /**
