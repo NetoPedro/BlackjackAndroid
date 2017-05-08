@@ -7,7 +7,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:replace="android:icon"
+
+    android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".SplashScreen" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -15,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameScreenActivity" android:screenOrientation="portrait">
+        <activity  android:name=".GameScreenActivity" android:screenOrientation="portrait">
 
         </activity>
         <activity android:name=".MenuActivity" android:screenOrientation="portrait">

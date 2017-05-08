@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class GameScreenActivity extends AppCompatActivity {
 
     private Board mBoard;
@@ -81,12 +83,42 @@ public class GameScreenActivity extends AppCompatActivity {
 
 
     private void alertGameOver(String text){
+       SweetAlertDialog sweetAlertDialog =  new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Game Over")
+                .showCancelButton(true)
+                .setCancelText("Don't play")
+                .setContentText(text)
+                .setConfirmText("Play Again")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismissWithAnimation();
+                        startComponents();
+                        showCards();
+                        updateGrids();
+                        hitButton.setEnabled(true);
+                    }
+                })
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                        startComponents();
+                        showCards();
+                        updateGrids();
+                        hitButton.setEnabled(true);
+                    }
+                }
+                );
+        sweetAlertDialog.setCancelable(false);
+        sweetAlertDialog.setCanceledOnTouchOutside(false);
+        sweetAlertDialog.show();
+
+    }
+/*
+    private void alertGameOver(String text){
         hitButton.setEnabled(false);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         AlertDialog alert =  new AlertDialog.Builder(this)
                 .setTitle("Game Over")
                 .setMessage(text)
@@ -112,12 +144,17 @@ public class GameScreenActivity extends AppCompatActivity {
                 .show();
         alert.setCancelable(false) ;
         alert.setCanceledOnTouchOutside(false);
-    }
+    }*/
 
 
 
 
     private void updateGrids(){
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ArrayList<Card> userHand = mBoard.userHand();
         ArrayList<Card> IAHand = mBoard.IAHand();
         int maxSize ;
@@ -147,21 +184,21 @@ public class GameScreenActivity extends AppCompatActivity {
 
             //cardImageView.setCompoundDrawablesWithIntrinsicBounds(rightIc, 0, 0, 0);
             GridLayout.LayoutParams param =new GridLayout.LayoutParams();
-            param.height = GridLayout.LayoutParams.MATCH_PARENT;
+            param.height = GridLayout.LayoutParams.MATCH_PARENT ;
             int width = parentLayout.getWidth();
             if(width == 0) width = this.getWindow().getWindowManager().getDefaultDisplay().getWidth();
-             param.width = width/maxSize -20;
-            param.rightMargin = 10;
-            param.leftMargin = 10;
-            param.bottomMargin=20;
-            param.topMargin = 0;
+             param.width = width/maxSize -60;
+            param.rightMargin = 30;
+            param.leftMargin = 30;
+            param.bottomMargin=30;
+            param.topMargin = 30;
 
             param.setGravity(Gravity.RIGHT);
             param.columnSpec = GridLayout.spec(i);
             param.rowSpec = GridLayout.spec(0);
             cardImageView.setLayoutParams (param);
             userPointsText.setText("User Points: "+mBoard.calculateUserPoints());
-            iaPointsText.setText("IA Points:"+mBoard.calculateIAPoints()+" \nUser Hand");
+            iaPointsText.setText("IA Points:"+mBoard.calculateIAPoints());
 
         }
 
@@ -174,14 +211,14 @@ public class GameScreenActivity extends AppCompatActivity {
             cardImageView.setAdjustViewBounds(true);
             //cardImageView.setCompoundDrawablesWithIntrinsicBounds(rightIc, 0, 0, 0);
             GridLayout.LayoutParams param =new GridLayout.LayoutParams();
-            param.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            param.height = GridLayout.LayoutParams.MATCH_PARENT  ;
             int width = parentLayout.getWidth();
             if(width == 0) width = this.getWindow().getWindowManager().getDefaultDisplay().getWidth();
-            param.width = width/maxSize- 20;
-            param.rightMargin = 10;
-            param.leftMargin = 10;
+            param.width = width/maxSize- 60;
+            param.rightMargin =30;
+            param.leftMargin = 30;
             param.topMargin = 30;
-            param.bottomMargin=20;
+            param.bottomMargin=30;
 
             param.setGravity(Gravity.CENTER);
             param.columnSpec = GridLayout.spec(i);

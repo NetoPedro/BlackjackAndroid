@@ -13,10 +13,17 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="IA Hand"
         android:id="@+id/textView"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
         android:layout_gravity="center"
         android:paddingTop="15dp" />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="IA Points"
+        android:id="@+id/iaPointsInfoTextView"
+        android:layout_weight="0.5"
+        android:layout_gravity="center" />
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -31,11 +38,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="IA Points \nUser Hand"
+        android:text="User Hand"
+        android:layout_weight="0.5"
+        android:id="@+id/textView2"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:paddingTop="15dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="User Points: "
+        android:id="@+id/userPointsInfoTextView"
         android:layout_weight="1"
-        android:id="@+id/iaPointsInfoTextView"
         android:layout_gravity="center" />
-
     <GridLayout
         android:layout_width="match_parent"
         android:background="@drawable/hands_border"
@@ -47,14 +63,7 @@
 
         android:id="@+id/userHand"></GridLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="User Points: "
-        android:id="@+id/userPointsInfoTextView"
-        android:layout_weight="1"
-        android:layout_gravity="center" />
+
 
     <LinearLayout
         android:orientation="horizontal"
