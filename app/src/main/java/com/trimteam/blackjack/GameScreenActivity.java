@@ -1,7 +1,6 @@
 package com.trimteam.blackjack;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class GameScreenActivity extends AppCompatActivity {
-
+    private MediaPlayer mediaPlayer ;
     private Board mBoard;
     GridLayout IAHandGrid, userHandGrid;
     LinearLayout parentLayout;
@@ -27,8 +26,7 @@ public class GameScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-
-
+        mediaPlayer = MediaPlayer.create(this,R.raw.card_slide6);
         userPointsText = (TextView) findViewById(R.id.userPointsInfoTextView);
         iaPointsText = (TextView) findViewById(R.id.iaPointsInfoTextView);
         IAHandGrid = (GridLayout) findViewById(R.id.IAHand);
@@ -38,8 +36,7 @@ public class GameScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 while (mBoard.calculateIAPoints()<17){
-                    mBoard.IAMove();
-                    updateGrids();
+                     updateGrids();
                 }
 
                 if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints() && mBoard.calculateIAPoints()<=21){
@@ -115,6 +112,10 @@ public class GameScreenActivity extends AppCompatActivity {
         sweetAlertDialog.show();
 
     }
+
+    private void cardSound(){
+        mediaPlayer.start();
+    }
 /*
     private void alertGameOver(String text){
         hitButton.setEnabled(false);
@@ -149,9 +150,10 @@ public class GameScreenActivity extends AppCompatActivity {
 
 
 
-    private void updateGrids(){
+    private boolean updateGrids(){
         try {
             Thread.sleep(300);
+            cardSound();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -227,7 +229,7 @@ public class GameScreenActivity extends AppCompatActivity {
 
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
+        return true;
     }
 
     /**
