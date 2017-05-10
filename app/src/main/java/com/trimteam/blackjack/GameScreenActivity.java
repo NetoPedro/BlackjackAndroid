@@ -1,5 +1,6 @@
 package com.trimteam.blackjack;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,18 +37,19 @@ public class GameScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 while (mBoard.calculateIAPoints()<17){
-                     updateGrids();
+                    mBoard.IAMove();
+                    updateGrids();
                 }
 
                 if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints() && mBoard.calculateIAPoints()<=21){
-                    alertGameOver("Fez " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
+                    alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. AI won with " + mBoard.calculateIAPoints() + " points. Keep trying? ?", "Defeat");
                 }
                 else if(mBoard.calculateIAPoints()<mBoard.calculateUserPoints() || mBoard.calculateIAPoints()>21){
-                    alertGameOver("Venceu com  " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
+                    alertGameOver("Won with  " + mBoard.calculateUserPoints() + " points. AI lost with " + mBoard.calculateIAPoints() + " points. Try to won again ?", "Victory");
 
                 }
                 else{
-                    alertGameOver("Empate com " + mBoard.calculateUserPoints()+ " pontos. Deseja continuar? ");
+                    alertGameOver("Draw with " + mBoard.calculateUserPoints()+ " points. Keep trying? ", "Draw");
                 }
             }
         });
@@ -63,10 +65,10 @@ public class GameScreenActivity extends AppCompatActivity {
                 updateGrids();
                 int result = mBoard.checkGameOver();
                 if(result==1){
-                    alertGameOver("Fez " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
+                    alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. AI won with " + mBoard.calculateIAPoints() + " points. Keep trying?", "Defeat");
                 }
                 else if(result == -1){
-                    alertGameOver("Venceu com  " + mBoard.calculateUserPoints() + " pontos. Contra " + mBoard.calculateIAPoints() + " da IA. Deseja continuar?");
+                    alertGameOver("Won with " + mBoard.calculateUserPoints() + " points. AI lost with " + mBoard.calculateIAPoints() + " points. Try to won again ?", "Victory");
                 }
             }
         });
@@ -76,12 +78,13 @@ public class GameScreenActivity extends AppCompatActivity {
         updateGrids();
         hitButton.setEnabled(true);
         System.out.println();
+
     }
 
 
-    private void alertGameOver(String text){
+    private void alertGameOver(String text , String title){
        SweetAlertDialog sweetAlertDialog =  new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText("Game Over")
+                .setTitleText(title)
                 .showCancelButton(true)
                 .setCancelText("Don't play")
                 .setContentText(text)
@@ -90,10 +93,7 @@ public class GameScreenActivity extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismissWithAnimation();
-                        startComponents();
-                        showCards();
-                        updateGrids();
-                        hitButton.setEnabled(true);
+                       startActivity(new Intent(GameScreenActivity.this, MenuActivity.class));
                     }
                 })
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
