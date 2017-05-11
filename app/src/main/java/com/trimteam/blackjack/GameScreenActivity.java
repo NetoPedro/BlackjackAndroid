@@ -23,8 +23,8 @@ public class GameScreenActivity extends AppCompatActivity {
     LinearLayout parentLayout;
     Button hitButton, standButton;
     TextView userPointsText, iaPointsText, coinsText;
-    
-
+    private int bet = 1; //TODO change bet to no constant value
+    private int points;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +32,9 @@ public class GameScreenActivity extends AppCompatActivity {
         coinsText = (TextView) findViewById(R.id.pointsText);
         Intent i = getIntent();
         Bundle bundle = i.getExtras();
-        coinsText.setText(bundle.getString("points"));
+        String pointsString = bundle.getString("points");
+        points = Integer.parseInt(pointsString);
+        coinsText.setText(points + "");
         mediaPlayer = MediaPlayer.create(this,R.raw.card_slide6);
         userPointsText = (TextView) findViewById(R.id.userPointsInfoTextView);
         iaPointsText = (TextView) findViewById(R.id.iaPointsInfoTextView);
@@ -49,10 +51,14 @@ public class GameScreenActivity extends AppCompatActivity {
 
                 if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints() && mBoard.calculateIAPoints()<=21){
                     alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. AI won with " + mBoard.calculateIAPoints() + " points. Keep trying? ?", "Defeat");
+                    points-=bet;
+                    coinsText.setText(points + "");
+
                 }
                 else if(mBoard.calculateIAPoints()<mBoard.calculateUserPoints() || mBoard.calculateIAPoints()>21){
                     alertGameOver("Won with  " + mBoard.calculateUserPoints() + " points. AI lost with " + mBoard.calculateIAPoints() + " points. Try to won again ?", "Victory");
-
+                    points+=bet;
+                    coinsText.setText(points + "");
                 }
                 else{
                     alertGameOver("Draw with " + mBoard.calculateUserPoints()+ " points. Keep trying? ", "Draw");
@@ -72,9 +78,13 @@ public class GameScreenActivity extends AppCompatActivity {
                 int result = mBoard.checkGameOver();
                 if(result==1){
                     alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. AI won with " + mBoard.calculateIAPoints() + " points. Keep trying?", "Defeat");
+                    points-=bet;
+                    coinsText.setText(points + "");
                 }
                 else if(result == -1){
                     alertGameOver("Won with " + mBoard.calculateUserPoints() + " points. AI lost with " + mBoard.calculateIAPoints() + " points. Try to won again ?", "Victory");
+                    points+=bet;
+                    coinsText.setText(points + "");
                 }
             }
         });
