@@ -1,6 +1,7 @@
 package com.trimteam.blackjack;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
@@ -8,6 +9,8 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -62,28 +65,7 @@ public class MenuActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mPreferences = getSharedPreferences("preferences", 0);
-        Date date = new Date();
-        date.setTime(System.currentTimeMillis());
-        if (mPreferences.getBoolean("firstrun", true)) {
-            // Do first run stuff here then set 'firstrun' as false
-            // using the following line to edit/commit prefs
-            mPreferences.edit().putBoolean("firstrun", false).commit();
-            points = STARTING_COINS;
-        }
-        int  day = 0, month = 0, year = 0;
-            mPreferences.getInt("points", points);
-            mPreferences.getInt("day", day);
-            mPreferences.getInt("month", month);
-            mPreferences.getInt("year", year);
-            if(day!=date.getDay()){
-                points  += BONUS_POINTS;
-            }
 
-
-        mPreferences.edit().putInt("day", date.getDay());
-        mPreferences.edit().putInt("month", date.getMonth());
-        mPreferences.edit().putInt("year", date.getYear());
         //TODO rater = new Rater(this.getBaseContext(),this);
         //android.app.AlertDialog ad = rater.show();
         //if(ad!=null ) ad.show();
@@ -101,6 +83,7 @@ public class MenuActivity extends AppCompatActivity {
        // title.setTypeface(typeface);
 
     }
+
 
     @Override
     protected void onStart() {
@@ -176,26 +159,35 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis());
+        int  day = 0, month = 0, year = 0;
+        String pointsString = new String();
+        pointsString = mPreferences.getString("points", pointsString);
+        if(!pointsString.isEmpty()) {
+            points = Integer.parseInt(pointsString);
+        }
+        day = mPreferences.getInt("day", day);
+        month = mPreferences.getInt("month", month);
+        year = mPreferences.getInt("year", year);
 
-        //boolean screenOn;
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-        //   screenOn = pm.isInteractive();
-        //} else {
-        //    screenOn = pm.isScreenOn();
-        // }
-        //if (screenOn) {
-        /*if (mServ != null) {
-         if (mServ.mPlayer == null) {
-         mServ.startMusic();
-         }
-         if(musicaOn){
-         mServ.resumeMusic();}
-         else mServ.pauseMusic();
-         }**/
-        //resumed = true;
-
-        //}
+        if(day!=date.getDay()){
+            points  += BONUS_POINTS;
+        }
+        SharedPreferences.Editor editor = mPreferences.edit();
+        if (mPreferences.getBoolean("firstrun", true)) {
+            // Do first run stuff here then set 'firstrun' as false
+            // using the following line to edit/commit prefs
+            editor.putBoolean("firstrun", false).apply();
+            points = STARTING_COINS;
+            editor.putString("points",points + "");
+        }
+       // mPreferences.edit().putInt("points", points);
+        editor.putInt("day", date.getDay()).apply();
+        editor.putInt("month", date.getMonth()).apply();
+        editor.putInt("year", date.getYear()).apply();
+        //editor.commit();
     }
 
     @Override

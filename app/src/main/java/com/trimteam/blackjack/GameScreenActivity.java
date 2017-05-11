@@ -1,7 +1,10 @@
 package com.trimteam.blackjack;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -18,6 +21,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class GameScreenActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer ;
+    private SharedPreferences mPreferences;
     private Board mBoard;
     GridLayout IAHandGrid, userHandGrid;
     LinearLayout parentLayout;
@@ -26,9 +30,11 @@ public class GameScreenActivity extends AppCompatActivity {
     private int bet = 1; //TODO change bet to no constant value
     private int points;
     @Override
+    //TODO save on preferences the new score
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+        mPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
         coinsText = (TextView) findViewById(R.id.pointsText);
         Intent i = getIntent();
         Bundle bundle = i.getExtras();
@@ -99,7 +105,8 @@ public class GameScreenActivity extends AppCompatActivity {
 
 
     private void alertGameOver(String text , String title){
-       SweetAlertDialog sweetAlertDialog =  new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+        mPreferences.edit().putString("points", points + "").apply();
+        SweetAlertDialog sweetAlertDialog =  new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(title)
                 .showCancelButton(true)
                 .setCancelText("Don't play")
@@ -109,7 +116,8 @@ public class GameScreenActivity extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismissWithAnimation();
-                       startActivity(new Intent(GameScreenActivity.this, MenuActivity.class));
+
+                        finish();
                     }
                 })
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
