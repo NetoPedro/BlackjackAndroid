@@ -1,42 +1,35 @@
 package com.trimteam.blackjack;
 
 
-        import android.content.ComponentName;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.ServiceConnection;
-        import android.content.SharedPreferences;
-        import android.content.pm.ResolveInfo;
-        import android.graphics.Typeface;
-        import android.icu.util.TimeUnit;
-        import android.media.AudioManager;
-        import android.net.Uri;
-        import android.os.Build;
-        import android.os.Handler;
-        import android.os.IBinder;
-        import android.os.PowerManager;
-        import android.preference.PreferenceManager;
-        import android.support.v4.util.TimeUtils;
-        import android.support.v7.app.AlertDialog;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.view.Display;
-        import android.view.View;
-        import android.widget.ImageView;
-        import android.widget.TextView;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
+import android.media.AudioManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-        import java.util.List;
+import java.util.Date;
+import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
-    public boolean mIsBound = false;
+    private boolean mIsBound = false;
+    private static final int STARTING_COINS= 1000;
+    private static final int BONUS_POINTS= 100;
+    private SharedPreferences mPreferences ;
     //private Rater rater;
+    private int points = 0;
     static boolean focus = false;
-    public static boolean resumed = false;
+    private static boolean resumed = false;
     private ImageView shareIcon;
-    public static boolean outraAtividade = false;
-    public static Intent music;
-    public static AudioManager am;
-    public static Runnable mDelayedStopRunnable = new Runnable() {
+    private static boolean outraAtividade = false;
+    private static Intent music;
+    private static AudioManager am;
+    private static Runnable mDelayedStopRunnable = new Runnable() {
         @Override
         public void run() {
         }
@@ -69,6 +62,26 @@ public class MenuActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mPreferences = getSharedPreferences("preferences", 0);
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis());
+        int  day = 0, month = 0, year = 0;
+        if(mPreferences!=null) {
+            mPreferences.getInt("points", points);
+            mPreferences.getInt("day", day);
+            mPreferences.getInt("month", month);
+            mPreferences.getInt("year", year);
+            if(day!=date.getDay()){
+                points  += BONUS_POINTS;
+            }
+        }
+        else{
+            points = STARTING_COINS;
+        }
+
+        mPreferences.edit().putInt("day", date.getDay());
+        mPreferences.edit().putInt("month", date.getMonth());
+        mPreferences.edit().putInt("year", date.getYear());
         //TODO rater = new Rater(this.getBaseContext(),this);
         //android.app.AlertDialog ad = rater.show();
         //if(ad!=null ) ad.show();
@@ -101,6 +114,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MenuActivity.this, GameScreenActivity.class);
+                i.putExtra("points", points);
                 startActivity(i);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 outraAtividade = true;
