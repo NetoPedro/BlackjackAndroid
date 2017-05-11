@@ -22,11 +22,17 @@ public class GameScreenActivity extends AppCompatActivity {
     GridLayout IAHandGrid, userHandGrid;
     LinearLayout parentLayout;
     Button hitButton, standButton;
-    TextView userPointsText, iaPointsText;
+    TextView userPointsText, iaPointsText, coinsText;
+    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+        coinsText = (TextView) findViewById(R.id.pointsText);
+        Intent i = getIntent();
+        Bundle bundle = i.getExtras();
+        coinsText.setText(bundle.getString("points"));
         mediaPlayer = MediaPlayer.create(this,R.raw.card_slide6);
         userPointsText = (TextView) findViewById(R.id.userPointsInfoTextView);
         iaPointsText = (TextView) findViewById(R.id.iaPointsInfoTextView);

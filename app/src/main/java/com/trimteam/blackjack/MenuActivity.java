@@ -65,8 +65,13 @@ public class MenuActivity extends AppCompatActivity {
         mPreferences = getSharedPreferences("preferences", 0);
         Date date = new Date();
         date.setTime(System.currentTimeMillis());
+        if (mPreferences.getBoolean("firstrun", true)) {
+            // Do first run stuff here then set 'firstrun' as false
+            // using the following line to edit/commit prefs
+            mPreferences.edit().putBoolean("firstrun", false).commit();
+            points = STARTING_COINS;
+        }
         int  day = 0, month = 0, year = 0;
-        if(mPreferences!=null) {
             mPreferences.getInt("points", points);
             mPreferences.getInt("day", day);
             mPreferences.getInt("month", month);
@@ -74,10 +79,7 @@ public class MenuActivity extends AppCompatActivity {
             if(day!=date.getDay()){
                 points  += BONUS_POINTS;
             }
-        }
-        else{
-            points = STARTING_COINS;
-        }
+
 
         mPreferences.edit().putInt("day", date.getDay());
         mPreferences.edit().putInt("month", date.getMonth());
@@ -114,8 +116,8 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MenuActivity.this, GameScreenActivity.class);
-                i.putExtra("points", points);
-                startActivity(i);
+                i.putExtra("points", points + "");
+                    startActivity(i);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 outraAtividade = true;
             }
