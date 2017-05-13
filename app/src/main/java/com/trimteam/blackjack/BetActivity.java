@@ -28,6 +28,8 @@ public class BetActivity extends AppCompatActivity {
         thirdBetButton = (Button) findViewById(R.id.thirdBet);
         fourthBetButton = (Button) findViewById(R.id.fourthBet);
 
+
+
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,10 +47,21 @@ public class BetActivity extends AppCompatActivity {
 
     }
 
+    private void checkButtonValue(Button button){
+        if(Integer.parseInt(button.getText().toString()) > points )
+            button.setEnabled(false);
+        else
+            button.setEnabled(true);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         getPoints();
+        checkButtonValue(firstBetButton);
+        checkButtonValue(secondBetButton);
+        checkButtonValue(thirdBetButton);
+        checkButtonValue(fourthBetButton);
     }
 
     private synchronized void getPoints(){
