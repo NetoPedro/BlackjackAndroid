@@ -41,6 +41,7 @@ public class GameScreenActivity extends AppCompatActivity {
         String pointsString = bundle.getString("points");
         points = Integer.parseInt(pointsString);
         coinsText.setText(points + "");
+        bet = Integer.parseInt(bundle.getString("bet"));
         mediaPlayer = MediaPlayer.create(this,R.raw.card_slide6);
         userPointsText = (TextView) findViewById(R.id.userPointsInfoTextView);
         iaPointsText = (TextView) findViewById(R.id.iaPointsInfoTextView);
@@ -105,7 +106,7 @@ public class GameScreenActivity extends AppCompatActivity {
 
 
     private void alertGameOver(String text , String title){
-        mPreferences.edit().putString("points", points + "").apply();
+        mPreferences.edit().putString("points", points + "").commit();
         SweetAlertDialog sweetAlertDialog =  new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(title)
                 .showCancelButton(true)

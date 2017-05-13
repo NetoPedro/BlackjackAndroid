@@ -21,8 +21,7 @@ import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
     private boolean mIsBound = false;
-    private static final int STARTING_COINS= 1000;
-    private static final int BONUS_POINTS= 100;
+
     private SharedPreferences mPreferences ;
     //private Rater rater;
     private int points = 0;
@@ -98,7 +97,7 @@ public class MenuActivity extends AppCompatActivity {
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MenuActivity.this, GameScreenActivity.class);
+                Intent i = new Intent(MenuActivity.this, BetActivity.class);
                 i.putExtra("points", points + "");
                     startActivity(i);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -159,35 +158,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
-        Date date = new Date();
-        date.setTime(System.currentTimeMillis());
-        int  day = 0, month = 0, year = 0;
-        String pointsString = new String();
-        pointsString = mPreferences.getString("points", pointsString);
-        if(!pointsString.isEmpty()) {
-            points = Integer.parseInt(pointsString);
-        }
-        day = mPreferences.getInt("day", day);
-        month = mPreferences.getInt("month", month);
-        year = mPreferences.getInt("year", year);
 
-        if(day!=date.getDay()){
-            points  += BONUS_POINTS;
-        }
-        SharedPreferences.Editor editor = mPreferences.edit();
-        if (mPreferences.getBoolean("firstrun", true)) {
-            // Do first run stuff here then set 'firstrun' as false
-            // using the following line to edit/commit prefs
-            editor.putBoolean("firstrun", false).apply();
-            points = STARTING_COINS;
-            editor.putString("points",points + "");
-        }
-       // mPreferences.edit().putInt("points", points);
-        editor.putInt("day", date.getDay()).apply();
-        editor.putInt("month", date.getMonth()).apply();
-        editor.putInt("year", date.getYear()).apply();
-        //editor.commit();
     }
 
     @Override
