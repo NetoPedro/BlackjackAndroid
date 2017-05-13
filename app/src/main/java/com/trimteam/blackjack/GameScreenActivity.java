@@ -40,7 +40,6 @@ public class GameScreenActivity extends AppCompatActivity {
         Bundle bundle = i.getExtras();
         String pointsString = bundle.getString("points");
         points = Integer.parseInt(pointsString);
-        coinsText.setText(points + "");
         bet = Integer.parseInt(bundle.getString("bet"));
         mediaPlayer = MediaPlayer.create(this,R.raw.card_slide6);
         userPointsText = (TextView) findViewById(R.id.userPointsInfoTextView);
@@ -58,16 +57,16 @@ public class GameScreenActivity extends AppCompatActivity {
 
                 if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints() && mBoard.calculateIAPoints()<=21){
                     alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. AI won with " + mBoard.calculateIAPoints() + " points. Keep trying? ?", "Defeat");
-                    points-=bet;
                     coinsText.setText(points + "");
 
                 }
                 else if(mBoard.calculateIAPoints()<mBoard.calculateUserPoints() || mBoard.calculateIAPoints()>21){
+                    points+=2*bet;
                     alertGameOver("Won with  " + mBoard.calculateUserPoints() + " points. AI lost with " + mBoard.calculateIAPoints() + " points. Try to won again ?", "Victory");
-                    points+=bet;
                     coinsText.setText(points + "");
                 }
                 else{
+                    points+=bet;
                     alertGameOver("Draw with " + mBoard.calculateUserPoints()+ " points. Keep trying? ", "Draw");
                 }
             }
@@ -85,12 +84,11 @@ public class GameScreenActivity extends AppCompatActivity {
                 int result = mBoard.checkGameOver();
                 if(result==1){
                     alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. AI won with " + mBoard.calculateIAPoints() + " points. Keep trying?", "Defeat");
-                    points-=bet;
                     coinsText.setText(points + "");
                 }
                 else if(result == -1){
+                    points+=2*bet;
                     alertGameOver("Won with " + mBoard.calculateUserPoints() + " points. AI lost with " + mBoard.calculateIAPoints() + " points. Try to won again ?", "Victory");
-                    points+=bet;
                     coinsText.setText(points + "");
                 }
             }
@@ -105,8 +103,11 @@ public class GameScreenActivity extends AppCompatActivity {
     }
 
 
-    private void alertGameOver(String text , String title){
-        mPreferences.edit().putString("points", points + "").commit();
+    private synchronized void alertGameOver(String text , String title){
+        mPreferences.edit().putString("points", points + "").apply();
+        boolean canKeepGoing = true;
+        if(bet>points)  canKeepGoing = false;
+        final boolean finalCanKeepGoing = canKeepGoing;
         SweetAlertDialog sweetAlertDialog =  new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(title)
                 .showCancelButton(true)
@@ -117,18 +118,23 @@ public class GameScreenActivity extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sweetAlertDialog.dismissWithAnimation();
-
                         finish();
                     }
                 })
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
-                        startComponents();
-                        showCards();
-                        updateGrids();
-                        hitButton.setEnabled(true);
+                        if(finalCanKeepGoing) {
+                            sDialog.dismissWithAnimation();
+                            startComponents();
+                            showCards();
+                            updateGrids();
+                            hitButton.setEnabled(true);
+                        }
+                        else{
+                            sDialog.dismissWithAnimation();
+                            finish();
+                        }
                     }
                 }
                 );
@@ -268,5 +274,9 @@ public class GameScreenActivity extends AppCompatActivity {
      */
     private void startComponents() {
         mBoard = Board.startBoard();
+        points-=bet;
+        mPreferences.edit().putString("points", points + "").apply();
+        coinsText.setText(points + "");
+
     }
 }

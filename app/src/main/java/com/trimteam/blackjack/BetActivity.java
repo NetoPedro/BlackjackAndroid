@@ -22,6 +22,7 @@ public class BetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bet);
+        mPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
         firstBetButton = (Button) findViewById(R.id.firstBet);
         secondBetButton = (Button) findViewById(R.id.secondBet);
         thirdBetButton = (Button) findViewById(R.id.thirdBet);
@@ -50,8 +51,7 @@ public class BetActivity extends AppCompatActivity {
         getPoints();
     }
 
-    private void getPoints(){
-        mPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
+    private synchronized void getPoints(){
         Date date = new Date();
         date.setTime(System.currentTimeMillis());
         int  day = 0, month = 0, year = 0;
