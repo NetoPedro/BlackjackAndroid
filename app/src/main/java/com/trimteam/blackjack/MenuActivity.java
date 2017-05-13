@@ -1,63 +1,23 @@
 package com.trimteam.blackjack;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
-import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Date;
 import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
-    private boolean mIsBound = false;
 
-    private SharedPreferences mPreferences ;
     //private Rater rater;
     private int points = 0;
-    static boolean focus = false;
-    private static boolean resumed = false;
     private ImageView shareIcon;
-    private static boolean outraAtividade = false;
-    private static Intent music;
-    private static AudioManager am;
-    private static Runnable mDelayedStopRunnable = new Runnable() {
-        @Override
-        public void run() {
-        }
-    };
-    public static AudioManager.OnAudioFocusChangeListener afChangeListener =
-            new AudioManager.OnAudioFocusChangeListener() {
-                public void onAudioFocusChange(int focusChange) {
-                    if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-                        // Permanent loss of audio focus
-                        // Pause playback immediately
-                        // Wait 30 seconds before stopping playback
-                        mHandler.postDelayed(mDelayedStopRunnable, 30 * 1000);
-                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                        if (musicaOn) {
-                            if (resumed && focus) {
-                            }
-                        }
-                    }
-                }
 
-
-            };
-    public static Handler mHandler = new Handler();
-    public static boolean musicaOn = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +29,9 @@ public class MenuActivity extends AppCompatActivity {
         //android.app.AlertDialog ad = rater.show();
         //if(ad!=null ) ad.show();
        /*TODO MobileAds.initialize(getApplicationContext(), "ca-app-pub-3410114126236036~1623476703");
-        am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);*/
-        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        //musicaOn = (sharedPreferences.getBoolean("som_ligado",true));
 
 
         TextView title = (TextView) findViewById(R.id.text_main_title);
@@ -88,12 +45,6 @@ public class MenuActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         ImageView play = (ImageView) findViewById(R.id.play);
-
-        //mServ = new MusicService();
-
-        focus = true;
-        resumed = true;
-
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,19 +52,8 @@ public class MenuActivity extends AppCompatActivity {
                 i.putExtra("points", points + "");
                     startActivity(i);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                outraAtividade = true;
             }
         });
-        //ImageView opcoes = (ImageView) findViewById(R.id.settings);
-        //opcoes.setOnClickListener(new View.OnClickListener() {
-        //  @Override
-        //   public void onClick(View view) {
-        //       Intent i = new Intent(MainActivity.this, Opcoes.class);
-        //        startActivity(i);
-        //      outraAtividade = true;
-        //     }
-        //});
-
         shareIcon = (ImageView) findViewById(R.id.share);
         shareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,55 +84,6 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        resumed = false;
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        focus = hasFocus;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        resumed = false;
-    }
-
-    @Override
-    protected void onUserLeaveHint() {
-        super.onUserLeaveHint();
-        resumed = false;
-        if (!outraAtividade) {
-            //doUnbindService();
-            //stopService(music);
-          //  am.abandonAudioFocus(afChangeListener);
-        }
-
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        resumed = false;
-
-
-//        am.abandonAudioFocus(afChangeListener);
-
     }
 }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -147,40 +146,6 @@ public class GameScreenActivity extends AppCompatActivity {
     private void cardSound(){
         mediaPlayer.start();
     }
-/*
-    private void alertGameOver(String text){
-        hitButton.setEnabled(false);
-
-        AlertDialog alert =  new AlertDialog.Builder(this)
-                .setTitle("Game Over")
-                .setMessage(text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        startComponents();
-                        showCards();
-                        updateGrids();
-                        hitButton.setEnabled(true);
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        //TODO change to previous screen
-                        startComponents();
-                        showCards();
-                        updateGrids();
-                        hitButton.setEnabled(true);
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-        alert.setCancelable(false) ;
-        alert.setCanceledOnTouchOutside(false);
-    }*/
-
-
-
-
     private boolean updateGrids(){
         try {
             Thread.sleep(300);
@@ -206,7 +171,6 @@ public class GameScreenActivity extends AppCompatActivity {
         ImageView cardImageView;
         for (int i = 0; i < userHand.size(); i++) {
             cardImageView = new ImageView(this.getApplicationContext());
-            //cardImageView.setText(facilities.get(i));
             String resource = userHand.get(i).resource();
             int id = getResources().getIdentifier(resource, "drawable", getPackageName());
             cardImageView.setImageResource(id);
@@ -215,7 +179,6 @@ public class GameScreenActivity extends AppCompatActivity {
             cardImageView.setScaleType(ImageView.ScaleType.CENTER);
             cardImageView.setAdjustViewBounds(true);
 
-            //cardImageView.setCompoundDrawablesWithIntrinsicBounds(rightIc, 0, 0, 0);
             GridLayout.LayoutParams param =new GridLayout.LayoutParams();
             param.height = GridLayout.LayoutParams.MATCH_PARENT ;
             int width = parentLayout.getWidth();
@@ -237,12 +200,10 @@ public class GameScreenActivity extends AppCompatActivity {
 
         for (int i = 0; i < IAHand.size(); i++) {
             cardImageView = new ImageView(this.getApplicationContext());
-            //cardImageView.setText(facilities.get(i));
             int id = getResources().getIdentifier(IAHand.get(i).resource(), "drawable", getPackageName());
             cardImageView.setImageResource(id);
             IAHandGrid.addView(cardImageView, i);
             cardImageView.setAdjustViewBounds(true);
-            //cardImageView.setCompoundDrawablesWithIntrinsicBounds(rightIc, 0, 0, 0);
             GridLayout.LayoutParams param =new GridLayout.LayoutParams();
             param.height = GridLayout.LayoutParams.MATCH_PARENT  ;
             int width = parentLayout.getWidth();
@@ -252,7 +213,6 @@ public class GameScreenActivity extends AppCompatActivity {
             param.leftMargin = 30;
             param.topMargin = 30;
             param.bottomMargin=30;
-
             param.setGravity(Gravity.CENTER);
             param.columnSpec = GridLayout.spec(i);
             param.rowSpec = GridLayout.spec(0);
