@@ -50,7 +50,7 @@ public class GameScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                mBoard.removeNullCard();
-                while (mBoard.calculateIAPoints()<17){
+                while (mBoard.calculateIAPoints()<21 && mBoard.calculateIAPoints()<mBoard.calculateUserPoints()){
                     mBoard.IAMove();
                     updateGrids();
                 }
