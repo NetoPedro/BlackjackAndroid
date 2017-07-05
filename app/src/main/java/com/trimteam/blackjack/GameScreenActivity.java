@@ -49,6 +49,7 @@ public class GameScreenActivity extends AppCompatActivity {
         standButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+               mBoard.removeNullCard();
                 while (mBoard.calculateIAPoints()<17){
                     mBoard.IAMove();
                     updateGrids();
@@ -76,18 +77,10 @@ public class GameScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mBoard.userMove();
-                if(mBoard.calculateIAPoints()<17){
-                    mBoard.IAMove();
-                }
                 updateGrids();
                 int result = mBoard.checkGameOver();
                 if(result==1){
                     alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. AI won with " + mBoard.calculateIAPoints() + " points. Keep trying?", "Defeat");
-                    coinsText.setText(points + "");
-                }
-                else if(result == -1){
-                    points+=2*bet;
-                    alertGameOver("Won with " + mBoard.calculateUserPoints() + " points. AI lost with " + mBoard.calculateIAPoints() + " points. Try to won again ?", "Victory");
                     coinsText.setText(points + "");
                 }
             }

@@ -20,6 +20,10 @@ public class Board {
      */
     private ArrayList<Card> IAHand;
 
+    public void removeNullCard() {
+        IAHand.remove(new Card(Card.CardSuit.BACK, Card.CardType.NULL));
+    }
+
     /**
      * Game states enum.
      */
@@ -48,14 +52,16 @@ public class Board {
      */
     private void setInitialHands(){
 
-        while(userHand.size() != 2 || IAHand.size() != 2){
+        while(userHand.size() != 2 || IAHand.size() != 1){
             if(userHand.size() != 2) {
                 perfomMove(userHand);
             }
-            if(IAHand.size()!=2){
+            if(IAHand.size()!=1){
                 perfomMove(IAHand);
             }
         }
+        Card card = new Card(Card.CardSuit.BACK, Card.CardType.NULL);
+        IAHand.add(card);
     }
 
     /**
@@ -92,9 +98,9 @@ public class Board {
      * @param moveList
      */
     private void perfomMove(ArrayList<Card> moveList){
-        int typeSelection =  (int)(Math.random() * 12),
-                suitSelection = (int)( Math.random() * 3);
-        Card card = new Card(Card.CardSuit.values()[suitSelection], Card.CardType.values()[typeSelection]);
+        long typeSelection =  Math.round(Math.random() * 12),
+                suitSelection = Math.round( Math.random() * 3);
+        Card card = new Card(Card.CardSuit.values()[(int)suitSelection], Card.CardType.values()[(int)typeSelection]);
         if (mDeck.removeFromDeck(card)) moveList.add(card);
 
     }

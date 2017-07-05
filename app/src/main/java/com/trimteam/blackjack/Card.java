@@ -10,14 +10,14 @@ public class Card {
      * Types of cards. This type determines the value of the card
      */
     public enum CardType {
-        ACE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,KING,QUEEN,JACK
+        ACE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,KING,QUEEN,JACK,NULL
     }
 
     /**
      * Suits of cards. There are 13 types for each suit. One type for suit!
      */
     public enum CardSuit{
-        HEARTS,DIAMONDS,CLUBS, SPADES
+        HEARTS,DIAMONDS,CLUBS, SPADES,BACK
     }
 
 
@@ -68,6 +68,8 @@ public class Card {
                 break;
             case NINE: mValue = 9;
                 break;
+            case NULL: mValue = 0;
+                break;
             case TEN: ;
             case KING:;
             case QUEEN:;
@@ -95,7 +97,7 @@ public class Card {
 
     public String resource(){
         String resource = "";
-        if(mType.equals(CardType.ACE)||mType.equals(CardType.KING)||mType.equals(CardType.QUEEN)||mType.equals(CardType.JACK)){
+        if(mType.equals(CardType.ACE)||mType.equals(CardType.KING)||mType.equals(CardType.QUEEN)||mType.equals(CardType.JACK)||mType.equals(CardType.NULL)){
             resource +=mType.name().toLowerCase();
         }
         else{
