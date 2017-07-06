@@ -1,5 +1,6 @@
 package com.trimteam.blackjack;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class GameScreenActivity extends AppCompatActivity {
+public class GameScreenActivity extends Activity {
     private MediaPlayer mediaPlayer ;
     private SharedPreferences mPreferences;
     private Board mBoard;
@@ -30,7 +33,7 @@ public class GameScreenActivity extends AppCompatActivity {
     private int points;
     @Override
     //TODO save on preferences the new score
-    protected void onCreate(Bundle savedInstanceState) {
+    protected synchronized void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
         mPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
@@ -50,9 +53,21 @@ public class GameScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                mBoard.removeNullCard();
+
                 while (mBoard.calculateIAPoints()<21 && mBoard.calculateIAPoints()<mBoard.calculateUserPoints()){
-                    mBoard.IAMove();
-                    updateGrids();
+                    try {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                mBoard.IAMove();
+                                updateGrids();
+                            }
+                        });
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints() && mBoard.calculateIAPoints()<=21){
@@ -139,13 +154,10 @@ public class GameScreenActivity extends AppCompatActivity {
     private void cardSound(){
         mediaPlayer.start();
     }
-    private boolean updateGrids(){
-        try {
-            Thread.sleep(300);
-            cardSound();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+
+    private synchronized boolean updateGrids(){
+       cardSound();
         ArrayList<Card> userHand = mBoard.userHand();
         ArrayList<Card> IAHand = mBoard.IAHand();
         int maxSize ;
@@ -167,7 +179,10 @@ public class GameScreenActivity extends AppCompatActivity {
             String resource = userHand.get(i).resource();
             int id = getResources().getIdentifier(resource, "drawable", getPackageName());
             cardImageView.setImageResource(id);
-
+            if(i==userHand.size()){
+                cardImageView.setAnimation(AnimationUtils.loadAnimation(this,android.R.anim.fade_in));
+                cardImageView.animate();
+            }
             userHandGrid.addView(cardImageView, i);
             cardImageView.setScaleType(ImageView.ScaleType.CENTER);
             cardImageView.setAdjustViewBounds(true);
@@ -188,13 +203,18 @@ public class GameScreenActivity extends AppCompatActivity {
             cardImageView.setLayoutParams (param);
             userPointsText.setText("User Points: "+mBoard.calculateUserPoints());
             iaPointsText.setText("IA Points:"+mBoard.calculateIAPoints());
-
+            IAHandGrid.invalidate();
+            userHandGrid.invalidate();
         }
 
         for (int i = 0; i < IAHand.size(); i++) {
             cardImageView = new ImageView(this.getApplicationContext());
             int id = getResources().getIdentifier(IAHand.get(i).resource(), "drawable", getPackageName());
             cardImageView.setImageResource(id);
+            if(i == IAHand.size()){
+                cardImageView.setAnimation(AnimationUtils.loadAnimation(this,android.R.anim.fade_in));
+                cardImageView.animate();
+            }
             IAHandGrid.addView(cardImageView, i);
             cardImageView.setAdjustViewBounds(true);
             GridLayout.LayoutParams param =new GridLayout.LayoutParams();
