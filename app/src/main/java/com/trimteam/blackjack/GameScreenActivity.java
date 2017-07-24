@@ -1,6 +1,5 @@
 package com.trimteam.blackjack;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -18,10 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class GameScreenActivity extends Activity {
+public class GameScreenActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer ;
     private SharedPreferences mPreferences;
     private Board mBoard;
@@ -51,33 +52,41 @@ public class GameScreenActivity extends Activity {
         standButton = (Button) findViewById(R.id.standButton);
         standButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public synchronized void onClick(View view) {
                mBoard.removeNullCard();
-
+                final Semaphore mutex = new Semaphore(0);
                 while (mBoard.calculateIAPoints()<21 && mBoard.calculateIAPoints()<mBoard.calculateUserPoints()){
                     try {
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                mBoard.IAMove();
-                                updateGrids();
-                            }
-                        });
-                        Thread.sleep(50);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    Runnable runnable =new Runnable() {
+                        @Override
+                        public synchronized void run() {
+                            mBoard.IAMove();
+                            updateGrids();
+                            mutex.release();
+                        }
+                    };
+                    runOnUiThread(runnable);
+                    try {
+                        mutex.acquire();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
 
                 if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints() && mBoard.calculateIAPoints()<=21){
-                    alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. AI won with " + mBoard.calculateIAPoints() + " points. Keep trying? ?", "Defeat");
+                    alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. Dealer won with " + mBoard.calculateIAPoints() + " points. Keep trying? ?", "Defeat");
                     coinsText.setText(points + "");
 
                 }
                 else if(mBoard.calculateIAPoints()<mBoard.calculateUserPoints() || mBoard.calculateIAPoints()>21){
                     points+=2*bet;
-                    alertGameOver("Won with  " + mBoard.calculateUserPoints() + " points. AI lost with " + mBoard.calculateIAPoints() + " points. Try to won again ?", "Victory");
+                    alertGameOver("Won with  " + mBoard.calculateUserPoints() + " points. Dealer lost with " + mBoard.calculateIAPoints() + " points. Try to won again ?", "Victory");
                     coinsText.setText(points + "");
                 }
                 else{
@@ -95,7 +104,7 @@ public class GameScreenActivity extends Activity {
                 updateGrids();
                 int result = mBoard.checkGameOver();
                 if(result==1){
-                    alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. AI won with " + mBoard.calculateIAPoints() + " points. Keep trying?", "Defeat");
+                    alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. Dealer won with " + mBoard.calculateIAPoints() + " points. Keep trying?", "Defeat");
                     coinsText.setText(points + "");
                 }
             }
@@ -157,7 +166,8 @@ public class GameScreenActivity extends Activity {
 
 
     private synchronized boolean updateGrids(){
-       cardSound();
+
+        cardSound();
         ArrayList<Card> userHand = mBoard.userHand();
         ArrayList<Card> IAHand = mBoard.IAHand();
         int maxSize ;
@@ -191,9 +201,9 @@ public class GameScreenActivity extends Activity {
             param.height = GridLayout.LayoutParams.MATCH_PARENT ;
             int width = parentLayout.getWidth();
             if(width == 0) width = this.getWindow().getWindowManager().getDefaultDisplay().getWidth();
-             param.width = width/maxSize -60;
-            param.rightMargin = 30;
-            param.leftMargin = 30;
+             param.width = width/maxSize -90;
+            param.rightMargin = 45;
+            param.leftMargin = 45;
             param.bottomMargin=30;
             param.topMargin = 30;
 
@@ -202,9 +212,8 @@ public class GameScreenActivity extends Activity {
             param.rowSpec = GridLayout.spec(0);
             cardImageView.setLayoutParams (param);
             userPointsText.setText("User Points: "+mBoard.calculateUserPoints());
-            iaPointsText.setText("IA Points:"+mBoard.calculateIAPoints());
-            IAHandGrid.invalidate();
-            userHandGrid.invalidate();
+            iaPointsText.setText("Dealer Points:"+mBoard.calculateIAPoints());
+
         }
 
         for (int i = 0; i < IAHand.size(); i++) {
@@ -221,9 +230,9 @@ public class GameScreenActivity extends Activity {
             param.height = GridLayout.LayoutParams.MATCH_PARENT  ;
             int width = parentLayout.getWidth();
             if(width == 0) width = this.getWindow().getWindowManager().getDefaultDisplay().getWidth();
-            param.width = width/maxSize- 60;
-            param.rightMargin =30;
-            param.leftMargin = 30;
+            param.width = width/maxSize- 90;
+            param.rightMargin =45;
+            param.leftMargin = 45;
             param.topMargin = 30;
             param.bottomMargin=30;
             param.setGravity(Gravity.CENTER);
@@ -232,7 +241,11 @@ public class GameScreenActivity extends Activity {
             cardImageView.setLayoutParams (param);
 
         }
+        IAHandGrid.invalidate();
+        userHandGrid.invalidate();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        IAHandGrid.invalidate();
+        userHandGrid.invalidate();
         return true;
     }
 

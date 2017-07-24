@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="IA Hand"
+        android:text="Dealer Hand"
         android:id="@+id/textView"
         android:layout_weight="1"
         android:paddingTop="10dp"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="IA Points"
+        android:text="Dealer Points"
         android:id="@+id/iaPointsInfoTextView"
         android:layout_weight="1"
         android:layout_gravity="center" />
@@ -100,12 +100,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="HIT"
+            android:background="@drawable/hands_border"
+
             android:id="@+id/hitButton"
             android:layout_weight="1" />
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/hands_border"
+
             android:text="STAND"
             android:id="@+id/standButton"
             android:layout_weight="1"/>

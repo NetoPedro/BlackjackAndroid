@@ -34,7 +34,6 @@ public class MenuActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);*/
 
 
-        TextView title = (TextView) findViewById(R.id.text_main_title);
         //Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/gomarice_super_g_type_2.ttf");
        // title.setTypeface(typeface);
 

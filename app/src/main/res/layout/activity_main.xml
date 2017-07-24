@@ -12,23 +12,18 @@
     android:gravity="center">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/text_main_title"
-        android:text="BLACKJACK"
-        android:textAllCaps="true"
-        android:textSize="56dp"
-        android:textColor="@android:color/holo_orange_light"
-        android:textAlignment="center"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="86dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="86dp"/>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:layout_marginTop="86dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="48dp"
+        android:src="@drawable/icon2"/>
     <LinearLayout
-        android:background="@drawable/button_border"
+        android:background="@drawable/hands_border"
         android:layout_marginTop="64dp"
         android:layout_marginBottom="32dp"
         android:layout_marginLeft="32dp"
