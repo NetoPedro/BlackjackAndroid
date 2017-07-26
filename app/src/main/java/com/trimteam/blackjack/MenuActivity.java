@@ -57,7 +57,7 @@ public class MenuActivity extends AppCompatActivity {
         shareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String urlToShare = "http://play.google.com/store/apps/details?id=com.trimteam.tictactoe";
+                String urlToShare = "http://play.google.com/store/apps/details?id=com.trimteam.blackjack";
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
 // intent.putExtra(Intent.EXTRA_SUBJECT, "Foo bar"); // NB: has no effect!
