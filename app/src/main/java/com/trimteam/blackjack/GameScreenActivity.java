@@ -3,10 +3,15 @@ package com.trimteam.blackjack;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -19,6 +24,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
+import java.util.logging.Handler;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -51,21 +57,56 @@ public class GameScreenActivity extends AppCompatActivity {
         userHandGrid = (GridLayout) findViewById(R.id.userHand);
         standButton = (Button) findViewById(R.id.standButton);
         standButton.setOnClickListener(new View.OnClickListener() {
+
+            public void runMother(final android.os.Handler handler) {
+                if (mBoard.calculateIAPoints()>=21 && mBoard.calculateIAPoints()>=mBoard.calculateUserPoints()) {
+                    if(mBoard.calculateIAPoints()>mBoard.calculateUserPoints() && mBoard.calculateIAPoints()<=21){
+                        alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. Dealer won with " + mBoard.calculateIAPoints() + " points. Keep trying? ?", "Defeat");
+                        coinsText.setText(points + "");
+
+                    }
+                    else if(mBoard.calculateIAPoints()<mBoard.calculateUserPoints() || mBoard.calculateIAPoints()>21){
+                        points+=2*bet;
+                        alertGameOver("Won with  " + mBoard.calculateUserPoints() + " points. Dealer lost with " + mBoard.calculateIAPoints() + " points. Try to won again ?", "Victory");
+                        coinsText.setText(points + "");
+                    }
+                    else{
+                        points+=bet;
+                        alertGameOver("Draw with " + mBoard.calculateUserPoints()+ " points. Keep trying? ", "Draw");
+                    }
+                    return;
+                }
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mBoard.IAMove();
+                        updateGrids(false);
+                        runMother(handler);
+
+                    }
+                }, 300 );
+            }
             @Override
-            public synchronized void onClick(View view) {
+            public void onClick(View view) {
+                mBoard.removeNullCard();
+                runMother(new android.os.Handler());
+
+
+
+            }
+
+            // @Override
+            public synchronized void onTouch (View view) {
                mBoard.removeNullCard();
                 final Semaphore mutex = new Semaphore(0);
                 while (mBoard.calculateIAPoints()<21 && mBoard.calculateIAPoints()<mBoard.calculateUserPoints()){
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Runnable runnable =new Runnable() {
+
+                    Runnable runnable =new Runnable () {
                         @Override
                         public synchronized void run() {
                             mBoard.IAMove();
-                            updateGrids();
+                            updateGrids(false);
                             mutex.release();
                         }
                     };
@@ -101,7 +142,7 @@ public class GameScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mBoard.userMove();
-                updateGrids();
+                updateGrids(true);
                 int result = mBoard.checkGameOver();
                 if(result==1){
                     alertGameOver("Lost with " + mBoard.calculateUserPoints() + " points. Dealer won with " + mBoard.calculateIAPoints() + " points. Keep trying?", "Defeat");
@@ -112,11 +153,13 @@ public class GameScreenActivity extends AppCompatActivity {
 
         startComponents();
         showCards();
-        updateGrids();
+        updateGrids(true);
         hitButton.setEnabled(true);
         System.out.println();
 
     }
+
+
 
 
     private synchronized void alertGameOver(String text , String title){
@@ -144,7 +187,7 @@ public class GameScreenActivity extends AppCompatActivity {
                             sDialog.dismissWithAnimation();
                             startComponents();
                             showCards();
-                            updateGrids();
+                            updateGrids(true);
                             hitButton.setEnabled(true);
                         }
                         else{
@@ -165,7 +208,7 @@ public class GameScreenActivity extends AppCompatActivity {
     }
 
 
-    private synchronized boolean updateGrids(){
+    private synchronized boolean updateGrids(boolean user){
 
         cardSound();
         ArrayList<Card> userHand = mBoard.userHand();
@@ -184,6 +227,7 @@ public class GameScreenActivity extends AppCompatActivity {
 
 
         ImageView cardImageView;
+        ImageView imageToAnim;
         for (int i = 0; i < userHand.size(); i++) {
             cardImageView = new ImageView(this.getApplicationContext());
             String resource = userHand.get(i).resource();
@@ -240,10 +284,11 @@ public class GameScreenActivity extends AppCompatActivity {
             param.rowSpec = GridLayout.spec(0);
             cardImageView.setLayoutParams (param);
 
+
         }
         IAHandGrid.invalidate();
         userHandGrid.invalidate();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+       // overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         IAHandGrid.invalidate();
         userHandGrid.invalidate();
         return true;
@@ -265,4 +310,5 @@ public class GameScreenActivity extends AppCompatActivity {
         coinsText.setText(points + "");
 
     }
+
 }

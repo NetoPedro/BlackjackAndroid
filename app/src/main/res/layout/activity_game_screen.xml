@@ -11,15 +11,16 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="10dp">
+
         <TextView
+            android:id="@+id/pointsText"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textAlignment="viewEnd"
-            android:text=""
-            android:id="@+id/pointsText"
             android:layout_weight="3"
-             />
+            android:text=""
+            android:textAlignment="viewEnd"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
         <ImageView
             android:layout_width="0dp"
             android:src="@drawable/coin"
@@ -30,15 +31,15 @@
 
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Dealer Hand"
-        android:id="@+id/textView"
-        android:layout_weight="1"
-        android:paddingTop="10dp"
         android:layout_gravity="center"
-         />
+        android:layout_weight="1"
+        android:paddingTop="2dp"
+        android:text="Dealer Hand"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -49,14 +50,14 @@
         android:layout_gravity="center" />
 
     <GridLayout
+        android:id="@+id/IAHand"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:rowCount="1"
-        android:columnCount="9"
+        android:layout_gravity="center"
         android:layout_weight="5"
         android:background="@drawable/hands_border"
-        android:layout_gravity="center"
-        android:id="@+id/IAHand"></GridLayout>
+        android:columnCount="9"
+        android:rowCount="1"></GridLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -67,7 +68,7 @@
         android:id="@+id/textView2"
         android:layout_gravity="center"
         android:textAlignment="center"
-        android:paddingTop="10dp"/>
+        android:paddingTop="2dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -76,17 +77,17 @@
         android:id="@+id/userPointsInfoTextView"
         android:layout_weight="1"
         android:layout_gravity="center" />
+
     <GridLayout
+        android:id="@+id/userHand"
         android:layout_width="match_parent"
-        android:background="@drawable/hands_border"
         android:layout_height="0dp"
-        android:columnCount="1"
-        android:rowCount="9"
-        android:layout_weight="5"
         android:layout_gravity="center"
+        android:layout_weight="5"
+        android:background="@drawable/hands_border"
+        android:columnCount="1"
 
-        android:id="@+id/userHand"></GridLayout>
-
+        android:rowCount="9"></GridLayout>
 
 
     <LinearLayout
@@ -97,13 +98,13 @@
         android:gravity="center">
 
         <Button
+            android:id="@+id/hitButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="HIT"
-            android:background="@drawable/hands_border"
+            android:layout_weight="1"
 
-            android:id="@+id/hitButton"
-            android:layout_weight="1" />
+            android:background="@drawable/hands_border"
+            android:text="HIT" />
 
         <Button
             android:layout_width="0dp"

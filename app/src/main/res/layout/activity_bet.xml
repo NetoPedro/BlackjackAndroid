@@ -22,66 +22,95 @@
         android:id="@+id/textView3" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:weightSum="2"
-        android:layout_marginBottom="30dp">
+        android:layout_weight="0.7"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="10"
-            android:background="@drawable/hands_border"
             android:id="@+id/firstBet"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp" />
-
-        <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/hands_border"
-            android:text="50"
-            android:id="@+id/secondBet"
-            android:layout_gravity="bottom|center"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.85"
+            android:background="@drawable/chip201bl"
             android:paddingBottom="30dp"
-            android:paddingTop="30dp" />
+            android:paddingTop="30dp"
+            android:text="10"
+
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/secondBet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_weight="0.85"
+            android:background="@drawable/chip201pp"
+            android:paddingBottom="30dp"
+            android:paddingTop="30dp"
+            android:textSize="25sp"
+            android:text="50" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="50dp">
+        android:gravity="center"
+        android:layout_weight="0.7"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:weightSum="2">
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.85"
             android:text="200"
-            android:background="@drawable/hands_border"
+            android:background="@drawable/chip201blue"
             android:id="@+id/thirdBet"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="top|center"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="top|left"
+            android:textSize="25sp"
+
             android:paddingBottom="30dp"
             android:paddingTop="30dp" />
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.85"
             android:text="500"
-            android:background="@drawable/hands_border"
+            android:textSize="25sp"
+            android:background="@drawable/chip201rd"
             android:id="@+id/fourthBet"
-            android:layout_gravity="top|center_horizontal"
+            android:layout_gravity="top|end"
             android:paddingTop="30dp"
             android:paddingBottom="30dp" />
     </LinearLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Current Bet : 0"
+        android:id="@+id/currentBet" />
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:text="Start"
+        android:background="@drawable/hands_border"
+        android:id="@+id/start"
+        android:layout_gravity="top|center_horizontal"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp" />
 </LinearLayout>

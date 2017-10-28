@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.Date;
 
@@ -14,10 +15,11 @@ public class BetActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferences;
     private int points;
+    private int currentBet = 0;
     private static final int STARTING_COINS= 1000;
     private static final int BONUS_POINTS= 100;
-    private Button firstBetButton, secondBetButton, thirdBetButton, fourthBetButton;
-
+    private Button firstBetButton, secondBetButton, thirdBetButton, fourthBetButton, startBt ;
+    private TextView betText ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,16 +29,43 @@ public class BetActivity extends AppCompatActivity {
         secondBetButton = (Button) findViewById(R.id.secondBet);
         thirdBetButton = (Button) findViewById(R.id.thirdBet);
         fourthBetButton = (Button) findViewById(R.id.fourthBet);
-
-
-
-        View.OnClickListener clickListener = new View.OnClickListener() {
+        betText =(TextView) findViewById(R.id.currentBet);
+        View.OnClickListener start = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(BetActivity.this, GameScreenActivity.class);
-                i.putExtra("bet",((Button) view).getText());
+                i.putExtra("bet",String.valueOf(currentBet));
                 i.putExtra("points",points + "");
                 startActivity(i);
+            }
+        } ;
+         startBt = (Button) findViewById(R.id.start)
+                ;
+        startBt.setOnClickListener(start);
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button  viewBt = (Button) view ;
+                String text = (String ) viewBt.getText();
+                if (text != null) {
+
+
+                int bet = Integer.parseInt(text);
+                currentBet += bet;
+                betText.setText("Current Bet: "+ currentBet);
+                if (currentBet + Integer.parseInt(firstBetButton.getText().toString()) > points){
+                    firstBetButton.setEnabled(false);
+                }
+                if (currentBet + Integer.parseInt(secondBetButton.getText().toString())> points){
+                    secondBetButton.setEnabled(false);
+                }
+                if (currentBet + Integer.parseInt(thirdBetButton.getText().toString()) > points){
+                    thirdBetButton.setEnabled(false);
+                }
+                if (currentBet +Integer.parseInt(fourthBetButton.getText().toString()) > points){
+                    fourthBetButton.setEnabled(false);
+                }
+                }
             }
         };
 
@@ -45,7 +74,9 @@ public class BetActivity extends AppCompatActivity {
         thirdBetButton.setOnClickListener(clickListener);
         fourthBetButton.setOnClickListener(clickListener);
 
+
     }
+
 
     private void checkButtonValue(Button button){
         if(Integer.parseInt(button.getText().toString()) > points )
@@ -58,6 +89,7 @@ public class BetActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getPoints();
+        currentBet = 0;
         checkButtonValue(firstBetButton);
         checkButtonValue(secondBetButton);
         checkButtonValue(thirdBetButton);
